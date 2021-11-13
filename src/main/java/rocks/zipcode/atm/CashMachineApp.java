@@ -1,5 +1,6 @@
 package rocks.zipcode.atm;
 
+import javafx.fxml.FXMLLoader;
 import rocks.zipcode.atm.bank.Bank;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -11,6 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.layout.FlowPane;
 
+import java.io.IOException;
+
 /**
  * @author ZipCodeWilmington
  */
@@ -21,11 +24,13 @@ public class CashMachineApp extends Application {
     private TextField field2 = new TextField();
     private CashMachine cashMachine = new CashMachine(new Bank());
 
-    private Parent createContent() {
+    private Parent createContent() throws IOException {
         VBox vbox = new VBox(10);
         vbox.setPrefSize(600, 600);
 
         TextArea areaInfo = new TextArea();
+
+      //  Parent root = FXMLLoader.load(getClass().getResource("CashMachineUI"));
 
         Button btnSubmit = new Button("Set Account ID");
         btnSubmit.setOnAction(e -> {
