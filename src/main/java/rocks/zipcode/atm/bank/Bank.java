@@ -14,11 +14,19 @@ public class Bank {
 
     public Bank() {
         accounts.put(1000, new BasicAccount(new AccountData(
-                1000, "Example 1", "example1@gmail.com", 500
+                1000, "Dolio Durant", "dolio@gmail.com", 5000
         )));
 
         accounts.put(2000, new PremiumAccount(new AccountData(
-                2000, "Example 2", "example2@gmail.com", 200
+                2000, "Leon Hunter", "leon@gmail.com", 200
+        )));
+
+        accounts.put(3000, new PremiumAccount(new AccountData(
+                3000, "Rogelio Gamboa Jr", "jr@gmail.com", 100
+        )));
+
+        accounts.put(4000, new PremiumAccount(new AccountData(
+                4000, "Kris Younger", "kris@gmail.com", 50000
         )));
     }
 
