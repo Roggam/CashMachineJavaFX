@@ -20,7 +20,7 @@ public class Bank {
                 1200, "John Doe", "john@gmail.com", 700F
         )));
         accounts.put(1500, new BasicAccount(new AccountData(
-                1500, "Mike Smith", "mike@outlook.com", 5000F
+                1500, "Will Smith", "mike@outlook.com", 8000000F
         )));
         accounts.put(2000, new PremiumAccount(new AccountData(
                 2000, "Leon Hunter", "leon@gmail.com", 200F
@@ -31,7 +31,7 @@ public class Bank {
         )));
 
         accounts.put(4000, new PremiumAccount(new AccountData(
-                4000, "Kris Younger", "kris@zipcode.com", 50000F
+                4000, "Kris Younger", "kris@zipcode.com", 500000F
         )));
     }
 

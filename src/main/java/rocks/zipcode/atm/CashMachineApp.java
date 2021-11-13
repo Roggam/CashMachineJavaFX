@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.scene.layout.FlowPane;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 
 /**
  * @author ZipCodeWilmington
@@ -26,74 +27,112 @@ import java.io.IOException;
 public class CashMachineApp extends Application {
 
     private TextField field = new TextField();
+    private TextField depositField = new TextField();
+    private TextField withdrawField = new TextField();
 
     private CashMachine cashMachine = new CashMachine(new Bank());
+
+    Stage window;
+
 
     private Parent createContent() throws IOException {
 
         VBox vbox = new VBox(10);
-        vbox.setPrefSize(600, 600);
 
-      vbox.setPadding(new Insets(25,10,10,10));
-        vbox.setSpacing(20); // add space
+        vbox.setPrefSize(600, 600);
         TextArea areaInfo = new TextArea();
 
+
+// Styling
+        vbox.setPadding(new Insets(25, 10, 10, 10));
+        vbox.setSpacing(20); // add space
+        depositField.setPromptText("Enter Amount To Deposit "); //Prompt Text
+        withdrawField.setPromptText("Enter Amount To Withdraw "); //Prompt Text
+        field.setPromptText("Please Enter Your Account ID "); //Prompt Text
         field.setStyle("-fx-text-box-border: #B22222; -fx-focus-color: #B22222;"); // add border color
         vbox.setStyle("-fx-background-color: linear-gradient(from 45% 25% to 100% 50%, #00ff87, #0f68a9)"); // Changes background Color
-        areaInfo.setFont(Font.font ("Poppins", 20)); // font style
+        areaInfo.setFont(Font.font("Poppins", 20)); // font style
+//Styling
 
-
-        Button btnSubmit = new Button("Set Account ID");
+        Button btnSubmit = new Button("Login ");
         btnSubmit.setStyle("-fx-background-color: #20B2AA; -fx-background-radius: 15px; -fx-text-fill: #ffffff"); // changes button style
 
+
         btnSubmit.setOnAction(e -> {
+
+
             int id = Integer.parseInt(field.getText());
             cashMachine.login(id);
-
             areaInfo.setText(cashMachine.toString());
+
+
+
         });
 
-        Button btnDeposit = new Button("Deposit");
+        Button btnDeposit = new Button("Deposit  ");
         btnDeposit.setStyle("-fx-background-color: #20B2AA; -fx-background-radius: 15px; -fx-text-fill: #ffffff"); // changes button style
+
         btnDeposit.setOnAction(e -> {
-            Float amount = Float.parseFloat(field.getText());
+            Float amount = Float.parseFloat(depositField.getText());
             cashMachine.deposit(amount);
 
             areaInfo.setText(cashMachine.toString());
         });
 
+
         Button btnWithdraw = new Button("Withdraw");
         btnWithdraw.setStyle("-fx-background-color: #20B2AA; -fx-background-radius: 15px; -fx-text-fill: #ffffff"); // changes button style
         btnWithdraw.setOnAction(e -> {
-            Float amount = Float.parseFloat(field.getText());
+            Float amount = Float.parseFloat(withdrawField.getText());
             cashMachine.withdraw(amount);
 
             areaInfo.setText(cashMachine.toString());
         });
 
-        Button btnExit = new Button("Exit");
+        Button btnExit = new Button("Logout ");
         btnExit.setStyle("-fx-background-color: #20B2AA; -fx-background-radius: 15px; -fx-text-fill: #ffffff"); // changes button style
         btnExit.setOnAction(e -> {
             cashMachine.exit();
 
             areaInfo.setText(cashMachine.toString());
         });
+//Login
+        FlowPane loginPane = new FlowPane();
+        loginPane.getChildren().addAll(btnSubmit, field, btnExit);
+        loginPane.setHgap(25);
+        loginPane.setPadding(new Insets(10));
+//Login
 
-        FlowPane flowpane = new FlowPane();
+     VBox depAndWithGroup = new VBox();
 
-        flowpane.getChildren().add(btnSubmit);
-        flowpane.getChildren().add(btnDeposit);
-        flowpane.getChildren().add(btnWithdraw);
-        flowpane.getChildren().add(btnExit);
-        flowpane.setHgap(10); // adds space in between buttons
-        vbox.getChildren().addAll(field, flowpane, areaInfo);
+        //Deposit
+        FlowPane depositPane = new FlowPane();
+        depositPane.getChildren().addAll(btnDeposit,depositField);
+        depositPane.setHgap(13);
+        depositPane.setPadding(new Insets(10));
+        //Deposit
+        //Withdraw
+        FlowPane withdrawPane = new FlowPane();
+        withdrawPane.getChildren().addAll(btnWithdraw,withdrawField);
+        withdrawPane.setHgap(10);
+        withdrawPane.setPadding(new Insets(10));
+        //Withdraw
+
+     depAndWithGroup.getChildren().addAll(depositPane, withdrawPane); //groups deposit and withdraw
+     depAndWithGroup.setDisable(true);
+
+        vbox.getChildren().addAll(loginPane, depAndWithGroup, areaInfo);
+
         return vbox;
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-        stage.setScene(new Scene(createContent()));
-        stage.show();
+    public void start(Stage primaryStage) throws Exception { // Scenes
+        window = primaryStage;
+        primaryStage.setScene(new Scene(createContent()));
+        primaryStage.show();
+//        stage.setScene(new Scene(createContent()));
+//        stage.show();
     }
 
     public static void main(String[] args) {
