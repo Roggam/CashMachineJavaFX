@@ -17,6 +17,8 @@ import javafx.scene.layout.FlowPane;
 public class CashMachineApp extends Application {
 
     private TextField field = new TextField();
+
+    private TextField field2 = new TextField();
     private CashMachine cashMachine = new CashMachine(new Bank());
 
     private Parent createContent() {
@@ -35,7 +37,7 @@ public class CashMachineApp extends Application {
 
         Button btnDeposit = new Button("Deposit");
         btnDeposit.setOnAction(e -> {
-            int amount = Integer.parseInt(field.getText());
+            Float amount = Float.parseFloat(field.getText());
             cashMachine.deposit(amount);
 
             areaInfo.setText(cashMachine.toString());
@@ -43,7 +45,7 @@ public class CashMachineApp extends Application {
 
         Button btnWithdraw = new Button("Withdraw");
         btnWithdraw.setOnAction(e -> {
-            int amount = Integer.parseInt(field.getText());
+            Float amount = Float.parseFloat(field.getText());
             cashMachine.withdraw(amount);
 
             areaInfo.setText(cashMachine.toString());
