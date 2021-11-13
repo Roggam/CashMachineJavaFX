@@ -1,6 +1,12 @@
 package rocks.zipcode.atm;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.text.Font;
 import rocks.zipcode.atm.bank.Bank;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -21,18 +27,25 @@ public class CashMachineApp extends Application {
 
     private TextField field = new TextField();
 
-    private TextField field2 = new TextField();
     private CashMachine cashMachine = new CashMachine(new Bank());
 
     private Parent createContent() throws IOException {
+
         VBox vbox = new VBox(10);
         vbox.setPrefSize(600, 600);
 
+      vbox.setPadding(new Insets(25,10,10,10));
+        vbox.setSpacing(20); // add space
         TextArea areaInfo = new TextArea();
 
-      //  Parent root = FXMLLoader.load(getClass().getResource("CashMachineUI"));
+        field.setStyle("-fx-text-box-border: #B22222; -fx-focus-color: #B22222;"); // add border color
+        vbox.setStyle("-fx-background-color: linear-gradient(from 45% 25% to 100% 50%, #00ff87, #0f68a9)"); // Changes background Color
+        areaInfo.setFont(Font.font ("Poppins", 20)); // font style
+
 
         Button btnSubmit = new Button("Set Account ID");
+        btnSubmit.setStyle("-fx-background-color: #20B2AA; -fx-background-radius: 15px; -fx-text-fill: #ffffff"); // changes button style
+
         btnSubmit.setOnAction(e -> {
             int id = Integer.parseInt(field.getText());
             cashMachine.login(id);
@@ -41,6 +54,7 @@ public class CashMachineApp extends Application {
         });
 
         Button btnDeposit = new Button("Deposit");
+        btnDeposit.setStyle("-fx-background-color: #20B2AA; -fx-background-radius: 15px; -fx-text-fill: #ffffff"); // changes button style
         btnDeposit.setOnAction(e -> {
             Float amount = Float.parseFloat(field.getText());
             cashMachine.deposit(amount);
@@ -49,6 +63,7 @@ public class CashMachineApp extends Application {
         });
 
         Button btnWithdraw = new Button("Withdraw");
+        btnWithdraw.setStyle("-fx-background-color: #20B2AA; -fx-background-radius: 15px; -fx-text-fill: #ffffff"); // changes button style
         btnWithdraw.setOnAction(e -> {
             Float amount = Float.parseFloat(field.getText());
             cashMachine.withdraw(amount);
@@ -57,6 +72,7 @@ public class CashMachineApp extends Application {
         });
 
         Button btnExit = new Button("Exit");
+        btnExit.setStyle("-fx-background-color: #20B2AA; -fx-background-radius: 15px; -fx-text-fill: #ffffff"); // changes button style
         btnExit.setOnAction(e -> {
             cashMachine.exit();
 
@@ -69,6 +85,7 @@ public class CashMachineApp extends Application {
         flowpane.getChildren().add(btnDeposit);
         flowpane.getChildren().add(btnWithdraw);
         flowpane.getChildren().add(btnExit);
+        flowpane.setHgap(10); // adds space in between buttons
         vbox.getChildren().addAll(field, flowpane, areaInfo);
         return vbox;
     }
