@@ -3,6 +3,8 @@ package rocks.zipcode.atm;
 import rocks.zipcode.atm.bank.AccountData;
 import rocks.zipcode.atm.bank.Bank;
 
+import java.util.Iterator;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -22,6 +24,12 @@ public class CashMachine {
         accountData = data;
     };
 
+    public Set<Integer> listOfAccounts(){
+      return bank.bankAccount();
+
+    }
+
+
     public void login(int id) {
         tryCall(
                 () -> bank.getAccountById(id),
@@ -29,7 +37,7 @@ public class CashMachine {
         );
     }
 
-    public void deposit(int amount) {
+    public void deposit(float amount) {
         if (accountData != null) {
             tryCall(
                     () -> bank.deposit(accountData, amount),
@@ -38,7 +46,7 @@ public class CashMachine {
         }
     }
 
-    public void withdraw(int amount) {
+    public void withdraw(float amount) {
         if (accountData != null) {
             tryCall(
                     () -> bank.withdraw(accountData, amount),
@@ -50,12 +58,19 @@ public class CashMachine {
     public void exit() {
         if (accountData != null) {
             accountData = null;
+
+
         }
     }
 
     @Override
     public String toString() {
-        return accountData != null ? accountData.toString() : "Try account 1000 or 2000 and click submit.";
+        return accountData != null ? accountData.toString() : "Please enter valid account ID";
+    }
+
+    public String logout(){
+
+        return "Logged Out";
     }
 
     private <T> void tryCall(Supplier<ActionResult<T> > action, Consumer<T> postAction) {
@@ -72,4 +87,17 @@ public class CashMachine {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+
+    public Bank getBank(){
+        return bank;
+
+    }
+
+    public AccountData  getAccountData(){
+
+        return accountData;
+    }
+
+
 }
