@@ -51,7 +51,7 @@ public class CashMachine {
     }
 
     public void withdraw(float amount) {
-        if (accountData != null && !(amount > 0)) {
+        if (accountData != null && !(amount < 0)) {
             tryCall(
                     () -> bank.withdraw(accountData, amount),
                     update

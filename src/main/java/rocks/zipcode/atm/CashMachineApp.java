@@ -103,7 +103,7 @@ public class CashMachineApp extends Application {
         btnWithdraw.setStyle(buttonStyle); // changes button style
         btnWithdraw.setOnAction(e -> {
             Float amount = Float.parseFloat(withdrawField.getText());
-
+            cashMachine.withdraw(amount);
 
             if (cashMachine.getAccountData().getBalance() < 0) {
 
@@ -115,10 +115,8 @@ public class CashMachineApp extends Application {
                 negativeAlert.showAndWait();
             }
 
-            else {
-                cashMachine.withdraw(amount);
-                areaInfo.setText(cashMachine.toString());
-            }
+            areaInfo.setText(cashMachine.toString());
+
         });
 
         Button btnExit = new Button("Logout ");
