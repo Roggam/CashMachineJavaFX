@@ -54,6 +54,7 @@ public class CashMachineApp extends Application {
         TextArea areaInfo = new TextArea();
         areaInfo.setPrefSize(500, 400);
         Alert overDraftAlert = new Alert(Alert.AlertType.WARNING); //OverDraft Alert Warning
+        Alert negativeAlert = new Alert(Alert.AlertType.WARNING); //OverDraft Alert Warning
 
 
 // Styling
@@ -89,6 +90,10 @@ public class CashMachineApp extends Application {
         btnDeposit.setOnAction(e -> {
             Float amount = Float.parseFloat(depositField.getText());
             cashMachine.deposit(amount);
+            if(amount < 0){
+                negativeAlert.setContentText("Please enter a positive number");
+                negativeAlert.showAndWait();
+            }
             areaInfo.setText(cashMachine.toString());
 
         });
@@ -101,9 +106,16 @@ public class CashMachineApp extends Application {
 
 
             if (cashMachine.getAccountData().getBalance() < 0) {
-                overDraftAlert.setContentText("You Are Broke, your Balance is " + cashMachine.getAccountData().getBalance());
+
+                overDraftAlert.setContentText("You Are Broke!!! your Balance is " + cashMachine.getAccountData().getBalance());
                 overDraftAlert.showAndWait();
-            } else {
+            }
+            else if(amount < 0){
+               negativeAlert.setContentText("Please enter a positive number");
+                negativeAlert.showAndWait();
+            }
+
+            else {
                 cashMachine.withdraw(amount);
                 areaInfo.setText(cashMachine.toString());
             }
@@ -118,17 +130,17 @@ public class CashMachineApp extends Application {
         });
 
 
-        Button btnShowAccts = new Button("List Accounts ");
-        btnShowAccts.setStyle(buttonStyle);
-
-        btnShowAccts.setOnAction(e -> {
-            for (Integer acct : cashMachine.listOfAccounts()) {
-
-                areaInfo.setText(acct.toString());
-            }
-
-
-        });
+//        Button btnShowAccts = new Button("List Accounts ");
+//        btnShowAccts.setStyle(buttonStyle);
+//
+//        btnShowAccts.setOnAction(e -> {
+//            for (Integer acct : cashMachine.listOfAccounts()) {
+//
+//                areaInfo.setText(acct.toString());
+//            }
+//
+//
+//        });
 
 ////This takes care of getting all accounts
         acctMenuBar.getMenus().add(listOfAccounts);
@@ -226,6 +238,11 @@ public class CashMachineApp extends Application {
             String Email = signUpEmail.getText();
             Float depositAmt = Float.parseFloat(signUpDeposit.getText());
             cashMachine.getBank().createAccountPremium(acct, fullName, Email, depositAmt);  // Creates Premium acct
+            listOfAccounts.getItems().clear(); //clears list of accounts
+            for (Integer acct1 : cashMachine.listOfAccounts()) {
+                MenuItem addAcct = new MenuItem(acct1.toString());
+                listOfAccounts.getItems().add(addAcct);
+            }
             signUpAcctNum.clear();
             signUpName.clear();
             signUpEmail.clear();
@@ -274,6 +291,12 @@ public class CashMachineApp extends Application {
             String Email = signUpEmail2.getText();
             Float depositAmt = Float.parseFloat(signUpDeposit2.getText());
             cashMachine.getBank().createAccountBasic(acct, fullName, Email, depositAmt);  // Creates Basic acct
+
+            listOfAccounts.getItems().clear(); //clears list of accounts
+            for (Integer acct1 : cashMachine.listOfAccounts()) {
+                MenuItem addAcct = new MenuItem(acct1.toString());
+                listOfAccounts.getItems().add(addAcct);
+            }
             signUpAcctNum2.clear();
             signUpName2.clear();
             signUpEmail2.clear();
