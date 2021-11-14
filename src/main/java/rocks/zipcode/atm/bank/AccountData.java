@@ -1,5 +1,7 @@
 package rocks.zipcode.atm.bank;
 
+import java.text.NumberFormat;
+
 /**
  * @author ZipCodeWilmington
  */
@@ -8,8 +10,8 @@ public final class AccountData {
     private final int id;
     private final String name;
     private final String email;
-
     private final float balance;
+
 
     AccountData(int id, String name, String email, float balance) {
         this.id = id;
@@ -41,6 +43,10 @@ public final class AccountData {
         return "Account id: " + id + '\n' +
                 "Name: " + name + '\n' +
                 "Email: " + email + '\n' +
-                "Balance: " + balance;
+                "Balance: " + NumberFormat.getCurrencyInstance().format(balance); // format to dollar
     }
+
+
+
+
 }

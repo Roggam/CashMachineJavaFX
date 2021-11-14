@@ -9,6 +9,11 @@ import java.util.Map;
  * @author ZipCodeWilmington
  */
 public class Bank {
+    private int id;
+    private  String name;
+    private  String email;
+    private  int Balance;
+
 
     private Map<Integer, Account> accounts = new HashMap<>();
 
@@ -29,9 +34,17 @@ public class Bank {
         accounts.put(3000, new PremiumAccount(new AccountData(
                 3000, "Rogelio Gamboa Jr", "junior@gmail.com", 100F
         )));
-
         accounts.put(4000, new PremiumAccount(new AccountData(
-                4000, "Kris Younger", "kris@zipcode.com", 500000F
+                4000, "Kris Younger", "kris@zipcode.com", 10000000F
+        )));
+
+    }
+
+
+    public void createAccount(int id, String name, String email, float balance) {
+
+        accounts.put(id, new PremiumAccount(new AccountData(
+                id, name, email, balance
         )));
     }
 

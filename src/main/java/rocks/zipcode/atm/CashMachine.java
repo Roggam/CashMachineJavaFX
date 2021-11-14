@@ -3,6 +3,7 @@ package rocks.zipcode.atm;
 import rocks.zipcode.atm.bank.AccountData;
 import rocks.zipcode.atm.bank.Bank;
 
+import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -50,12 +51,19 @@ public class CashMachine {
     public void exit() {
         if (accountData != null) {
             accountData = null;
+
+
         }
     }
 
     @Override
     public String toString() {
-        return accountData != null ? accountData.toString() : "You have successfully logged out!";
+        return accountData != null ? accountData.toString() : "Please enter valid account ID";
+    }
+
+    public String logout(){
+
+        return "Logged Out";
     }
 
     private <T> void tryCall(Supplier<ActionResult<T> > action, Consumer<T> postAction) {
@@ -72,4 +80,17 @@ public class CashMachine {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+
+    public Bank getBank(){
+        return bank;
+
+    }
+
+    public AccountData  getAccountData(){
+
+        return accountData;
+    }
+
+
 }
