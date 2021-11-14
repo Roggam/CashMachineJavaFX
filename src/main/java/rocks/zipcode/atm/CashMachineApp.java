@@ -23,10 +23,16 @@ public class CashMachineApp extends Application {
     private TextField login = new TextField();
     private TextField depositField = new TextField();
     private TextField withdrawField = new TextField();
+
     private TextField signUpAcctNum = new TextField();
     private TextField signUpName = new TextField();
     private TextField signUpDeposit = new TextField();
     private TextField signUpEmail = new TextField();
+
+    private TextField signUpAcctNum2 = new TextField();
+    private TextField signUpName2 = new TextField();
+    private TextField signUpDeposit2 = new TextField();
+    private TextField signUpEmail2 = new TextField();
 
     private Menu listOfAccounts = new Menu("List Of Accounts");
     private MenuBar acctMenuBar = new MenuBar();
@@ -39,8 +45,8 @@ public class CashMachineApp extends Application {
 
     private Parent createContent() throws FileNotFoundException {
 
-        cashMachine.getBank().createAccount(5000, "Brian Price", "brian@gmail.com", 1400F); // Test to create account
-        cashMachine.getBank().createAccount(6000, "Josh Green", "josh@gmail.com", 25000F); // Test to create account
+        cashMachine.getBank().createAccountPremium(5000, "Brian Price", "brian@gmail.com", 1400F); // Test to create account
+        cashMachine.getBank().createAccountPremium(6000, "Josh Green", "josh@gmail.com", 25000F); // Test to create account
 
 
         VBox vbox = new VBox(10);
@@ -146,6 +152,7 @@ public class CashMachineApp extends Application {
             login.clear();
             depositField.clear();
             withdrawField.clear();
+            areaInfo.clear();
         });
 
         //Login
@@ -181,40 +188,44 @@ public class CashMachineApp extends Application {
 
 
         GridPane signUpPane = new GridPane();
-        signUpPane.setPadding(new Insets(10, 10, 10, 10));
+        signUpPane.setPadding(new Insets(15, 15, 15, 15));
         signUpPane.setMinSize(300, 300);
-        signUpPane.setVgap(5);
-        signUpPane.setHgap(5);
+        signUpPane.setVgap(10);
+        signUpPane.setHgap(10);
 
+
+
+        Text premium = new Text("  Premium Account");
+        signUpPane.add(premium, 1,0);
         Text Acct = new Text("Account # ");
-        signUpPane.add(Acct, 0, 0);
+        signUpPane.add(Acct, 0, 1);
         signUpAcctNum.setPrefColumnCount(10);
-        signUpPane.add(signUpAcctNum, 1, 0);
+        signUpPane.add(signUpAcctNum, 1, 1);
 
         Text name = new Text("Name ");
-        signUpPane.add(name, 0, 1);
+        signUpPane.add(name, 0, 2);
         signUpName.setPrefColumnCount(10);
-        signUpPane.add(signUpName, 1, 1);
+        signUpPane.add(signUpName, 1, 2);
 
         Text email = new Text("Email ");
-        signUpPane.add(email, 0, 2);
+        signUpPane.add(email, 0, 3);
         signUpEmail.setPrefColumnCount(10);
-        signUpPane.add(signUpEmail, 1, 2);
+        signUpPane.add(signUpEmail, 1, 3);
 
-        Text deposit = new Text("Deposit Amt ");
-        signUpPane.add(deposit, 0, 3);
+        Text deposit = new Text("Initial Deposit");
+        signUpPane.add(deposit, 0, 4);
         signUpDeposit.setPrefColumnCount(10);
-        signUpPane.add(signUpDeposit, 1, 3);
+        signUpPane.add(signUpDeposit, 1, 4);
 
 
-        Button btnSignUp = new Button("Sign Up");
+        Button btnSignUp = new Button("Sign Up For Premium Account");
         btnSignUp.setStyle(buttonStyle);
         btnSignUp.setOnAction(e -> {   // This Takes care of creating new accounts
             int acct = Integer.parseInt(signUpAcctNum.getText());
             String fullName = signUpName.getText();
             String Email = signUpEmail.getText();
             Float depositAmt = Float.parseFloat(signUpDeposit.getText());
-            cashMachine.getBank().createAccount(acct, fullName, Email, depositAmt);
+            cashMachine.getBank().createAccountPremium(acct, fullName, Email, depositAmt);  // Creates Premium acct
             signUpAcctNum.clear();
             signUpName.clear();
             signUpEmail.clear();
@@ -222,7 +233,58 @@ public class CashMachineApp extends Application {
             window.setScene(scene1);
         });
 
-        signUpPane.add(btnSignUp, 0, 4); // added signup button to GridPane
+        signUpPane.add(btnSignUp, 0, 5); // added signup button to GridPane
+
+        GridPane signUpPane2 = new GridPane();
+        signUpPane2.setPadding(new Insets(15, 15, 15, 15));
+        signUpPane2.setMinSize(300, 300);
+        signUpPane2.setVgap(10);
+        signUpPane2.setHgap(10);
+
+
+
+        Text basic = new Text("Basic Account");
+        signUpPane2.add(basic, 1,0);
+        Text basiAcct = new Text("Account # ");
+        signUpPane2.add(basiAcct, 0, 1);
+        signUpAcctNum2.setPrefColumnCount(10);
+        signUpPane2.add(signUpAcctNum2, 1, 1);
+
+        Text basicName = new Text("Name ");
+        signUpPane2.add(basicName, 0, 2);
+        signUpName2.setPrefColumnCount(10);
+        signUpPane2.add(signUpName2, 1, 2);
+
+        Text basicEmail = new Text("Email ");
+        signUpPane2.add(basicEmail, 0, 3);
+        signUpEmail2.setPrefColumnCount(10);
+        signUpPane2.add(signUpEmail2, 1, 3);
+
+        Text basicDeposit = new Text("Initial Deposit");
+        signUpPane2.add(basicDeposit, 0, 4);
+        signUpDeposit2.setPrefColumnCount(10);
+        signUpPane2.add(signUpDeposit2, 1, 4);
+
+
+        Button btnBasicSignUp = new Button("Sign Up For Basic Account");
+        btnBasicSignUp.setStyle(buttonStyle);
+        btnBasicSignUp.setOnAction(e -> {   // This Takes care of creating new accounts
+            int acct = Integer.parseInt(signUpAcctNum2.getText());
+            String fullName = signUpName2.getText();
+            String Email = signUpEmail2.getText();
+            Float depositAmt = Float.parseFloat(signUpDeposit2.getText());
+            cashMachine.getBank().createAccountBasic(acct, fullName, Email, depositAmt);  // Creates Basic acct
+            signUpAcctNum2.clear();
+            signUpName2.clear();
+            signUpEmail2.clear();
+            signUpDeposit2.clear();
+            window.setScene(scene1);
+        });
+
+  signUpPane2.add(btnBasicSignUp, 0,5);
+
+
+
 
 
         Button btnGoBack = new Button("Go Back ");
@@ -231,9 +293,9 @@ public class CashMachineApp extends Application {
 
 
         VBox signUpForm = new VBox(10);
-        signUpForm.setPrefSize(500, 500);
+        signUpForm.setPrefSize(600, 600);
         signUpForm.setStyle(background);
-        signUpForm.getChildren().addAll(btnGoBack, signUpPane);
+        signUpForm.getChildren().addAll(btnGoBack, signUpPane, signUpPane2);
 
 
         return signUpForm;

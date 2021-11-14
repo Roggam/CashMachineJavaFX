@@ -42,9 +42,16 @@ public class Bank {
     }
 
 
-    public void createAccount(int id, String name, String email, float balance) { // created method to create ne accounts
+    public void createAccountPremium(int id, String name, String email, float balance) { // created method to create ne accounts
 
         accounts.put(id, new PremiumAccount(new AccountData(
+                id, name, email, balance
+        )));
+    }
+
+    public void createAccountBasic(int id, String name, String email, float balance) { // created method to create ne accounts
+
+        accounts.put(id, new BasicAccount(new AccountData(
                 id, name, email, balance
         )));
     }
