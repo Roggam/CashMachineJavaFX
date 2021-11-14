@@ -1,18 +1,19 @@
 package rocks.zipcode.atm;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import rocks.zipcode.atm.bank.Bank;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.layout.FlowPane;
+
+import java.io.FileNotFoundException;
 
 /**
  * @author ZipCodeWilmington
@@ -22,23 +23,31 @@ public class CashMachineApp extends Application {
     private TextField login = new TextField();
     private TextField depositField = new TextField();
     private TextField withdrawField = new TextField();
+    private TextField signUpAcctNum = new TextField();
+    private TextField signUpName = new TextField();
+    private TextField signUpDeposit = new TextField();
+    private TextField signUpEmail = new TextField();
+
+    private Menu listOfAccounts = new Menu("List Of Accounts");
+    private MenuBar acctMenuBar = new MenuBar();
+
     private CashMachine cashMachine = new CashMachine(new Bank());
     private String buttonStyle = "-fx-background-color: #20B2AA; -fx-background-radius: 15px; -fx-text-fill: #ffffff";
     private String background = "-fx-background-color: linear-gradient(from 45% 25% to 100% 50%, #00ff87, #0f68a9)";
     Stage window;
+    Scene scene1, scene2;
 
+    private Parent createContent() throws FileNotFoundException {
 
-    private Parent createContent()  {
-
-     cashMachine.getBank().createAccount(5000, "Brian Price", "brian@gmail.com", 1400F); // Test to create account
-     cashMachine.getBank().createAccount(6000, "Josh Green", "josh@gmail.com", 25000F); // Test to create account
+        cashMachine.getBank().createAccount(5000, "Brian Price", "brian@gmail.com", 1400F); // Test to create account
+        cashMachine.getBank().createAccount(6000, "Josh Green", "josh@gmail.com", 25000F); // Test to create account
 
 
         VBox vbox = new VBox(10);
-        vbox.setPrefSize(600, 600);
+        vbox.setPrefSize(750, 700);
         TextArea areaInfo = new TextArea();
-        areaInfo.setPrefSize(500, 600);
-       Alert overDraftAlert = new Alert(Alert.AlertType.WARNING);
+        areaInfo.setPrefSize(500, 400);
+        Alert overDraftAlert = new Alert(Alert.AlertType.WARNING); //OverDraft Alert Warning
 
 
 // Styling
@@ -59,10 +68,10 @@ public class CashMachineApp extends Application {
         btnSubmit.setOnAction(e -> {
             int id = Integer.parseInt(login.getText());
             //cashMachine.login(id);
-       if(cashMachine.getBank().getAccountById(id).getData() != null){ //checks if account is in bank
-           cashMachine.login(id);
-          depositAndWithdrawGrouped.setDisable(false); //enables deposit and withdraw fields and buttons
-         }
+            if (cashMachine.getBank().getAccountById(id).getData() != null) { //checks if account is in bank
+                cashMachine.login(id);
+                depositAndWithdrawGrouped.setDisable(false); //enables deposit and withdraw fields and buttons
+            }
             areaInfo.setText(cashMachine.toString());
 
 
@@ -85,72 +94,163 @@ public class CashMachineApp extends Application {
             Float amount = Float.parseFloat(withdrawField.getText());
 
 
-        if(cashMachine.getAccountData().getBalance() < 0){
-            overDraftAlert.setContentText("You Are Broke, your Balance is " + cashMachine.getAccountData().getBalance());
-            overDraftAlert.showAndWait();
-        }
-        else {
-            cashMachine.withdraw(amount);
-            areaInfo.setText(cashMachine.toString());
-        }
+            if (cashMachine.getAccountData().getBalance() < 0) {
+                overDraftAlert.setContentText("You Are Broke, your Balance is " + cashMachine.getAccountData().getBalance());
+                overDraftAlert.showAndWait();
+            } else {
+                cashMachine.withdraw(amount);
+                areaInfo.setText(cashMachine.toString());
+            }
         });
 
         Button btnExit = new Button("Logout ");
         btnExit.setStyle(buttonStyle); // changes button style
         btnExit.setOnAction(e -> {
             cashMachine.exit();
-           depositAndWithdrawGrouped.setDisable(true); //Disables to logout
+            depositAndWithdrawGrouped.setDisable(true); //Disables to logout
             areaInfo.setText(cashMachine.logout());
         });
 
 
-        Button btnShowAccts = new Button("Show Accounts ");
+        Button btnShowAccts = new Button("List Accounts ");
         btnShowAccts.setStyle(buttonStyle);
 
-       btnShowAccts.setOnAction(e -> {
-       areaInfo.setText(cashMachine.getAccountData().toString());
+        btnShowAccts.setOnAction(e -> {
+            for (Integer acct : cashMachine.listOfAccounts()) {
 
-    } );
+                areaInfo.setText(acct.toString());
+            }
 
-      //Login
+
+        });
+
+////This takes care of getting all accounts
+        acctMenuBar.getMenus().add(listOfAccounts);
+        for (Integer acct : cashMachine.listOfAccounts()) {
+            MenuItem addAcct = new MenuItem(acct.toString());
+            listOfAccounts.getItems().add(addAcct);
+        }
+////
+
+        Button btnSignUp = new Button("Sign Up ");
+        btnSignUp.setStyle(buttonStyle);
+        btnSignUp.setOnAction(e -> {
+            areaInfo.setText("Sign Up ");
+            window.setScene(scene2);
+
+        });
+
+        Button btnClear = new Button("Clear Fields ");
+        btnClear.setStyle(buttonStyle);
+        btnClear.setOnAction(e -> {
+            login.clear();
+            depositField.clear();
+            withdrawField.clear();
+        });
+
+        //Login
         FlowPane loginPane = new FlowPane();
-        loginPane.getChildren().addAll(btnSubmit, login, btnExit,btnShowAccts);
+        loginPane.getChildren().addAll(btnSubmit, login, btnExit, btnSignUp, btnClear);
         loginPane.setHgap(25);
         loginPane.setPadding(new Insets(10));
-       //Login
-
+        //Login
 
 
         //Deposit
         FlowPane depositPane = new FlowPane();
-        depositPane.getChildren().addAll(btnDeposit,depositField);
+        depositPane.getChildren().addAll(btnDeposit, depositField);
         depositPane.setHgap(13);
         depositPane.setPadding(new Insets(10));
         //Deposit
         //Withdraw
         FlowPane withdrawPane = new FlowPane();
-        withdrawPane.getChildren().addAll(btnWithdraw,withdrawField);
+        withdrawPane.getChildren().addAll(btnWithdraw, withdrawField);
         withdrawPane.setHgap(10);
         withdrawPane.setPadding(new Insets(10));
         //Withdraw
 
-       depositAndWithdrawGrouped.getChildren().addAll(depositPane, withdrawPane); //groups deposit and withdraw
-       depositAndWithdrawGrouped.setDisable(true); // disabled buttons
+        depositAndWithdrawGrouped.getChildren().addAll(depositPane, withdrawPane); //groups deposit and withdraw
+        depositAndWithdrawGrouped.setDisable(true); // disabled buttons
 
-       vbox.getChildren().addAll(loginPane, depositAndWithdrawGrouped, areaInfo);
+        vbox.getChildren().addAll(acctMenuBar,loginPane, depositAndWithdrawGrouped, areaInfo);
 
-       return vbox;
+        return vbox;
     }
 
+    private Parent signUpForm() { // SIGN UP FORM
 
 
+        GridPane signUpPane = new GridPane();
+        signUpPane.setPadding(new Insets(10, 10, 10, 10));
+        signUpPane.setMinSize(300, 300);
+        signUpPane.setVgap(5);
+        signUpPane.setHgap(5);
+
+        Text Acct = new Text("Account # ");
+        signUpPane.add(Acct, 0, 0);
+        signUpAcctNum.setPrefColumnCount(10);
+        signUpPane.add(signUpAcctNum, 1, 0);
+
+        Text name = new Text("Name ");
+        signUpPane.add(name, 0, 1);
+        signUpName.setPrefColumnCount(10);
+        signUpPane.add(signUpName, 1, 1);
+
+        Text email = new Text("Email ");
+        signUpPane.add(email, 0, 2);
+        signUpEmail.setPrefColumnCount(10);
+        signUpPane.add(signUpEmail, 1, 2);
+
+        Text deposit = new Text("Deposit Amt ");
+        signUpPane.add(deposit, 0, 3);
+        signUpDeposit.setPrefColumnCount(10);
+        signUpPane.add(signUpDeposit, 1, 3);
+
+
+        Button btnSignUp = new Button("Sign Up");
+        btnSignUp.setStyle(buttonStyle);
+        btnSignUp.setOnAction(e -> {   // This Takes care of creating new accounts
+            int acct = Integer.parseInt(signUpAcctNum.getText());
+            String fullName = signUpName.getText();
+            String Email = signUpEmail.getText();
+            Float depositAmt = Float.parseFloat(signUpDeposit.getText());
+            cashMachine.getBank().createAccount(acct, fullName, Email, depositAmt);
+            signUpAcctNum.clear();
+            signUpName.clear();
+            signUpEmail.clear();
+            signUpDeposit.clear();
+            window.setScene(scene1);
+        });
+
+        signUpPane.add(btnSignUp, 0, 4); // added signup button to GridPane
+
+
+        Button btnGoBack = new Button("Go Back ");
+        btnGoBack.setStyle(buttonStyle);
+        btnGoBack.setOnAction(e -> window.setScene(scene1));
+
+
+        VBox signUpForm = new VBox(10);
+        signUpForm.setPrefSize(500, 500);
+        signUpForm.setStyle(background);
+        signUpForm.getChildren().addAll(btnGoBack, signUpPane);
+
+
+        return signUpForm;
+    }
 
 
     @Override
     public void start(Stage primaryStage) throws Exception { // Scenes
         window = primaryStage;
-        primaryStage.setScene(new Scene(createContent()));
+        scene1 = new Scene(createContent());
+        scene2 = new Scene(signUpForm());
+
+        primaryStage.setScene(scene1);
         primaryStage.show();
+        primaryStage.setTitle("Welcome to ZipCloudBank!!");
+
+
 //        stage.setScene(new Scene(createContent()));
 //        stage.show();
     }

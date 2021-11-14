@@ -4,6 +4,7 @@ import rocks.zipcode.atm.ActionResult;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author ZipCodeWilmington
@@ -41,12 +42,17 @@ public class Bank {
     }
 
 
-    public void createAccount(int id, String name, String email, float balance) {
+    public void createAccount(int id, String name, String email, float balance) { // created method to create ne accounts
 
         accounts.put(id, new PremiumAccount(new AccountData(
                 id, name, email, balance
         )));
     }
+
+    public Set<Integer> bankAccount() {
+        return accounts.keySet();
+    }
+
 
     public ActionResult<AccountData> getAccountById(int id) {
         Account account = accounts.get(id);
