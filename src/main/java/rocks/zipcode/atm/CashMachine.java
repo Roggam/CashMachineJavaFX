@@ -38,16 +38,20 @@ public class CashMachine {
     }
 
     public void deposit(float amount) {
-        if (accountData != null) {
+
+
+       if (accountData != null && !(amount < 0)) {
             tryCall(
                     () -> bank.deposit(accountData, amount),
                     update
             );
         }
+
+
     }
 
     public void withdraw(float amount) {
-        if (accountData != null) {
+        if (accountData != null && !(amount < 0)) {
             tryCall(
                     () -> bank.withdraw(accountData, amount),
                     update
@@ -72,6 +76,8 @@ public class CashMachine {
 
         return "Logged Out";
     }
+
+
 
     private <T> void tryCall(Supplier<ActionResult<T> > action, Consumer<T> postAction) {
         try {
