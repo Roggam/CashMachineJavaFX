@@ -1,6 +1,7 @@
 package rocks.zipcode.atm;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -13,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.layout.FlowPane;
 
-import java.io.FileNotFoundException;
+
 
 /**
  * @author ZipCodeWilmington
@@ -43,7 +44,7 @@ public class CashMachineApp extends Application {
     Stage window;
     Scene scene1, scene2;
 
-    private Parent createContent() throws FileNotFoundException {
+    private Parent createContent()  {
 
         cashMachine.getBank().createAccountPremium(5000, "Brian Price", "brian@gmail.com", 1400F); // Test to create account
         cashMachine.getBank().createAccountPremium(6000, "Josh Green", "josh@gmail.com", 25000F); // Test to create account
@@ -53,8 +54,12 @@ public class CashMachineApp extends Application {
         vbox.setPrefSize(750, 700);
         TextArea areaInfo = new TextArea();
         areaInfo.setPrefSize(500, 400);
+        Label welcome = new Label("   Welcome to ZipCloudBank ");
+        welcome.setMinSize(80,50);
+        welcome.setFont(Font.font("Poppins", 40));
+        welcome.setAlignment(Pos.CENTER);
         Alert overDraftAlert = new Alert(Alert.AlertType.WARNING); //OverDraft Alert Warning
-        Alert negativeAlert = new Alert(Alert.AlertType.WARNING); //OverDraft Alert Warning
+        Alert negativeAlert = new Alert(Alert.AlertType.WARNING); //Negative number Alert Warning
 
 
 // Styling
@@ -189,7 +194,7 @@ public class CashMachineApp extends Application {
         depositAndWithdrawGrouped.getChildren().addAll(depositPane, withdrawPane); //groups deposit and withdraw
         depositAndWithdrawGrouped.setDisable(true); // disabled buttons
 
-        vbox.getChildren().addAll(acctMenuBar,loginPane, depositAndWithdrawGrouped, areaInfo);
+        vbox.getChildren().addAll(welcome,acctMenuBar,loginPane, depositAndWithdrawGrouped, areaInfo);
 
         return vbox;
     }
